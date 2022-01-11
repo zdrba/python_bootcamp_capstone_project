@@ -3,46 +3,40 @@ from src.graph import Vertex
 
 import pytest
 
+
 def test_graph_init():
-    graph = Graph()
-    vertices = graph.vertices
+    no_vertices = set()
+    one_vertex = {Vertex("A")}
+    some_vertices = {Vertex("A"), Vertex("B"), Vertex("C")}
 
-    assert vertices == set()
+    empty_graph = Graph(no_vertices)
+    graph_with_one_vertex = Graph(one_vertex)
+    graph_with_some_vertices = Graph(some_vertices)
 
-
-def test_add_vertex():
-    g = Graph()
-    v = Vertex("A")
-
-    g.add_vertex(v)
-    vertices = g.vertices
-
-    assert len(vertices) == 1
-    assert vertices.pop() == v
+    assert empty_graph.vertices == no_vertices
+    assert graph_with_one_vertex.vertices == one_vertex
+    assert graph_with_some_vertices.vertices == some_vertices
 
 
-def test_add_vertex_with_same_vid_throws_value_error():
+def test_graph_edge_vertex_not_in_set_raises_value_error():
+    a_vertex = Vertex("A")
+    b_vertex = Vertex("B")
+
+    a_vertex.add_edge(b_vertex, 74)
+
+    Graph({a_vertex, b_vertex})
+
     with pytest.raises(ValueError):
-        g = Graph()
-        v1 = Vertex("A")
-        v2 = Vertex("A")
-        g.add_vertex(v1)
-        g.add_vertex(v2)
+        Graph({a_vertex})
 
 
 def test_find_vertex_by_vid():
-    g = Graph()
     av = Vertex("A")
     bv = Vertex("B")
     cv = Vertex("C")
     dv = Vertex("D")
     ev = Vertex("E")
-
-    g.add_vertex(av)
-    g.add_vertex(bv)
-    g.add_vertex(cv)
-    g.add_vertex(dv)
-    g.add_vertex(ev)
+    g = Graph({av, bv, cv, dv, ev})
 
     fav = g.find_vertex_by_vid("A")
     fcv = g.find_vertex_by_vid("C")
