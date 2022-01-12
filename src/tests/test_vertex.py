@@ -1,4 +1,4 @@
-from src.graph import Vertex
+from src import Vertex
 
 
 def test_vertex_init_with_vid():

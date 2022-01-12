@@ -1,5 +1,4 @@
-from src.graph import Graph
-from src.graph import Vertex
+from src import Graph, Vertex
 
 import pytest
 

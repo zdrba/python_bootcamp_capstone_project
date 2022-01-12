@@ -1,4 +1,4 @@
-from src.graph import Path, Vertex
+from src import Path, Vertex
 import pytest
 
 

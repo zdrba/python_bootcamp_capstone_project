@@ -1,5 +1,4 @@
-from src import Dijkstra
-from src.graph import Graph, Vertex, Path
+from src import Dijkstra, Graph, Vertex, Path
 
 import pytest
 
@@ -232,7 +231,7 @@ def test_dijkstra_remove_first_element_in_priority_list(dummy_graph):
     assert Path([b_vertex]) in d._priority_list
 
 
-def test_dijkstra_update_priority_score_add_paths(dummy_graph):
+def test_dijkstra_update_priority_list_add_paths(dummy_graph):
     a_vertex = dummy_graph.find_vertex_by_vid("A")
     b_vertex = dummy_graph.find_vertex_by_vid("B")
     d = Dijkstra(dummy_graph)
@@ -257,7 +256,29 @@ def test_dijkstra_update_priority_score_add_paths(dummy_graph):
     assert second_paths[0] in d._priority_list
 
 
-def test_dijkstra_update_priority_score_is_sorted_by_distance(dummy_graph):
+def test_dijkstra_update_priority_list_paths_with_one_worse_score_removed():
+    a_vertex = Vertex("A")
+    b_vertex = Vertex("B")
+    c_vertex = Vertex("C")
+
+    a_vertex.add_edge(b_vertex, 5)
+    a_vertex.add_edge(c_vertex, 99)
+
+    b_vertex.add_edge(c_vertex, 7)
+
+    long_path = Path([a_vertex, c_vertex])
+    short_path = Path([a_vertex, b_vertex, c_vertex])
+
+    d = Dijkstra(Graph({a_vertex, b_vertex, c_vertex}))
+    d._priority_list = [long_path]
+    d._vertex_score = {a_vertex: 0, b_vertex: 5, c_vertex: 7}
+
+    d._update_priority_list([short_path])
+
+    assert long_path not in d._priority_list
+
+
+def test_dijkstra_update_priority_list_is_sorted_by_distance(dummy_graph):
     a_vertex = dummy_graph.find_vertex_by_vid("A")
     b_vertex = dummy_graph.find_vertex_by_vid("B")
     c_vertex = dummy_graph.find_vertex_by_vid("C")

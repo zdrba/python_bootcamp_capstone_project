@@ -1,4 +1,4 @@
-from src.graph import Graph, Path, Vertex
+from . import Graph, Path, Vertex
 from typing import Dict, List, Optional
 
 
@@ -60,8 +60,19 @@ class Dijkstra:
         self._priority_list.pop(0)
 
     def _update_priority_list(self, paths: List[Path]) -> None:
+        self._remove_paths_from_priority_list_worse_than(paths)
         self._priority_list += paths
         self._priority_list.sort(key=lambda x: x.distance)
 
     def _is_shortest_path_found(self) -> bool:
         return self._priority_list[0].end_vertex == self._end_vertex
+
+    def _remove_paths_from_priority_list_worse_than(self, paths: List[Path]) -> None:
+        paths_popped = 0
+        for i in range(len(self._priority_list)):
+            for path in paths:
+                pl_i = i - paths_popped
+                if path.end_vertex == self._priority_list[pl_i].end_vertex \
+                        and path.distance < self._priority_list[pl_i].distance:
+                    self._priority_list.pop(pl_i)
+                    paths_popped += 1

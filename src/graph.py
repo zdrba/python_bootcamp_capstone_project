@@ -1,4 +1,4 @@
-from src.graph import Vertex
+from . import Vertex
 
 from typing import Set, Any, Optional
 
